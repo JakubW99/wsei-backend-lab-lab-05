@@ -14,10 +14,15 @@ namespace WebAPI.Controllers
     {
         private IQuizUserService _service;
 
+        public QuizController(IQuizUserService service) 
+        {
+            _service = service;
+        }
+
         // GET: api/<QuizController>
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<QuizDto> FindById(int id)
+        public async Task<ActionResult<QuizDto>> FindById(int id)
         {
             QuizDto quizDto = new QuizDto();
             var quiz = _service.FindQuizById(id);
@@ -51,6 +56,14 @@ namespace WebAPI.Controllers
         public void SaveAnswer([FromBody] QuizItemAnswerDto dto, [FromRoute] int quizId, [FromRoute] int quizItemId)
         {
             _service.SaveUserAnswerForQuiz(quizId, dto.UserId, quizItemId, dto.Answer);
+           
+        }
+
+        [HttpGet]
+        [Route("CorrectAnswers/{quizId}/{userId}")]
+        public int CountCorrectUserAnswers([FromRoute] int userId, [FromRoute] int quizId)
+        {
+            return _service.CountCorrectAnswersForQuizFilledByUser(quizId,userId);
         }
     }
 
