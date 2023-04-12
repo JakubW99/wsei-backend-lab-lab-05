@@ -1,21 +1,21 @@
-﻿using ApplicationCore.Interfaces.Criteria;
+﻿
 using ApplicationCore.Interfaces.Repository;
 using ApplicationCore.Models;
 using ApplicationCore.Specyfications;
 
-namespace ApplicationCore.Interfaces;
+namespace ApplicationCore.Interfaces.QuizUserService;
 
-public class QuizUserService: IQuizUserService
+public class QuizUserService : IQuizUserService
 {
-    private readonly IGenericRepository<Quiz, int> quizRepository;
-    private readonly IGenericRepository<QuizItem, int> itemRepository;
-    private readonly IGenericRepository<QuizItemUserAnswer, string> answerRepository;
+    private IGenericRepository<Quiz, int> _quizRepository;
+    private  IGenericRepository<QuizItem, int> _itemRepository;
+    private IGenericRepository<QuizItemUserAnswer, string> _answerRepository;
 
     public QuizUserService(IGenericRepository<Quiz, int> quizRepository, IGenericRepository<QuizItemUserAnswer, string> answerRepository, IGenericRepository<QuizItem, int> itemRepository)
     {
-        this.quizRepository = quizRepository;
-        this.answerRepository = answerRepository;
-        this.itemRepository = itemRepository;
+        this._quizRepository = quizRepository;
+        this._answerRepository = answerRepository;
+        this._itemRepository = itemRepository;
     }
 
     public Quiz CreateAndGetQuizRandom(int count)
@@ -23,16 +23,38 @@ public class QuizUserService: IQuizUserService
         throw new NotImplementedException();
     }
 
-    public Quiz? FindQuizById(int id)
+    public List<Quiz> FindAllQuizzes()
     {
-        return quizRepository.FindById(id);
+        return _quizRepository.FindAll();
     }
 
-    public void SaveUserAnswerForQuiz(int quizId, int userId, int quizItemId, string answer)
+    public Quiz? FindQuizById(int id)
     {
-        QuizItem? item = itemRepository.FindById(quizItemId);
-        var userAnswer = new QuizItemUserAnswer(quizItem: item, userId: userId, answer: answer, quizId: quizId);
-        answerRepository.Add(userAnswer);
+        return _quizRepository.FindById(id);
+    }
+
+    public QuizItemUserAnswer SaveUserAnswerForQuiz(int quizId, int quizItemId, int userId, string answer)
+    {
+        var quiz = _quizRepository.FindById(quizId);
+        var item = _itemRepository.FindById(quizItemId);
+        if (quiz is null)
+        {
+            throw new Exception($"Quiz with id = {quizId} not found!");
+        }
+
+        if (item is null)
+        {
+            throw new Exception($"Quiz item with id = {quizItemId} not found!");
+        }
+
+        var userAnswer = new QuizItemUserAnswer(
+        
+            quizItem: item,
+            quizId : quizId,
+            userId : userId,
+            answer :  answer
+        );
+        return _answerRepository.Add(userAnswer);
     }
 
 
@@ -42,11 +64,6 @@ public class QuizUserService: IQuizUserService
         //     .Where(x => x.QuizId == quizId)
         //     .Where(x => x. UserId == userId)
         //     .ToList();
-        return answerRepository.FindBySpecification(new QuizItemsForQuizIdFilledByUser(quizId, userId)).ToList();
-    }
-
-    public List<Quiz> FindAllQuizzes()
-    {
-        return quizRepository.FindAll();
+        return _answerRepository.FindBySpecification(new QuizItemsForQuizIdFilledByUser(quizId, userId)).ToList();
     }
 }

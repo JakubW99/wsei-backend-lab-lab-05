@@ -52,18 +52,39 @@ namespace WebAPI.Controllers
 
         }
         [HttpPost]
-        [Route("{quizId}/items/{itemId}")]
-        public void SaveAnswer([FromBody] QuizItemAnswerDto dto, [FromRoute] int quizId, [FromRoute] int quizItemId)
-        {
-            _service.SaveUserAnswerForQuiz(quizId, dto.UserId, quizItemId, dto.Answer);
-           
-        }
+        [Route("{quizId}/items/{itemId}/answers")]
+        //public ActionResult SaveAnswer([FromBody] QuizItemAnswerDto dto, int quizId, int itemId)
+        //{
+        //    try
+        //    {
+        //        //var answer = _service.SaveUserAnswerForQuiz(quizId, itemId, dto.UserId, dto.UserAnswer);
+        //        return Created("", _service.SaveUserAnswerForQuiz(quizId, itemId, dto.UserId, dto.Answer));
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
 
-        [HttpGet]
-        [Route("CorrectAnswers/{quizId}/{userId}")]
-        public int CountCorrectUserAnswers([FromRoute] int userId, [FromRoute] int quizId)
+        [HttpGet, Produces("application/json")]
+        [Route("{quizId}/feedbacks")]
+        public FeedbackQuizDto GetFeedback(int quizId)
         {
-            return _service.CountCorrectAnswersForQuizFilledByUser(quizId,userId);
+            int userId = 1;
+            var answers = _service.GetUserAnswersForQuiz(quizId, userId);
+            //TODO: zdefiniuj mapper listy odpowiedzi na obiekt FeedbackQuizDto 
+            return new FeedbackQuizDto()
+            {
+                QuizId = quizId,
+                UserId = 1,
+                QuizItemsAnswers = answers.Select(i => new FeedbackQuizItemDto()
+                {
+                    Question = i.QuizItem.Question,
+                    Answer = i.Answer,
+                    IsCorrect = i.IsCorrect(),
+                    QuizItemId = i.QuizItem.Id
+                }).ToList()
+            };
         }
     }
 
