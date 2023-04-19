@@ -53,18 +53,18 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("{quizId}/items/{itemId}/answers")]
-        //public ActionResult SaveAnswer([FromBody] QuizItemAnswerDto dto, int quizId, int itemId)
-        //{
-        //    try
-        //    {
-        //        //var answer = _service.SaveUserAnswerForQuiz(quizId, itemId, dto.UserId, dto.UserAnswer);
-        //        return Created("", _service.SaveUserAnswerForQuiz(quizId, itemId, dto.UserId, dto.Answer));
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
+        public ActionResult SaveAnswer([FromBody] QuizItemAnswerDto dto, int quizId, int itemId)
+        {
+            try
+            {
+                //var answer = _service.SaveUserAnswerForQuiz(quizId, itemId, dto.UserId, dto.UserAnswer);
+                return Created("", _service.SaveUserAnswerForQuiz(quizId, itemId, dto.UserId, dto.Answer));
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpGet, Produces("application/json")]
         [Route("{quizId}/feedbacks")]
