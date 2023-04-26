@@ -5,6 +5,8 @@ using ApplicationCore.Models;
 using Infrastructure;
 using Infrastructure.EF.Entities;
 using Infrastructure.Memory.Repository;
+using Infrastructure.MongoDB.Entities;
+using Infrastructure.MongoDB;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
@@ -19,6 +21,8 @@ namespace WebAPI
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<QuizDbContext>();
             // Add services to the container.
+            builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
+            builder.Services.AddSingleton<QuizUserServiceMongoDB>();
             builder.Services.AddSingleton<JwtSettings>();
             builder.Services.ConfigureIdentity();
             builder.Services.ConfigureJWT(new JwtSettings(builder.Configuration));
