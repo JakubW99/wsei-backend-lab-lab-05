@@ -13,7 +13,7 @@ namespace Infrastructure.MongoDB.Entities
     public class QuizUserServiceMongoDB : IQuizUserService
     {
         private readonly IMongoCollection<QuizMongoEntity> _quizzes;
-        private readonly IMongoCollection<QuizItemUserAnswer> _answers;
+        private readonly IMongoCollection<QuizItemAnswerMongoEntity> _answers;
         private readonly MongoClient _client;
 
         public QuizUserServiceMongoDB(IOptions<MongoDBSettings> settings)
@@ -21,6 +21,7 @@ namespace Infrastructure.MongoDB.Entities
             _client = new MongoClient(settings.Value.ConnectionUri);
             IMongoDatabase database = _client.GetDatabase(settings.Value.DatabaseName);
             _quizzes = database.GetCollection<QuizMongoEntity>(settings.Value.QuizCollection);
+         _answers = database.GetCollection<QuizItemAnswerMongoEntity>(settings.Value.AnswerCollection);
         }
 
         public List<Quiz> FindAllQuizzes()
@@ -65,12 +66,45 @@ namespace Infrastructure.MongoDB.Entities
 
         public QuizItemUserAnswer SaveUserAnswerForQuiz(int quizId, int quizItemId, int userId, string answer)
         {
-            throw new NotImplementedException();
+            var findQuizItem = _quizzes.Find(x => x.QuizId == quizItemId).FirstOrDefault();
+            var quizItemUserAnswerMongo = (new QuizItemAnswerMongoEntity()
+            {
+                QuizId = quizId,
+                QuizItemId = quizItemId,
+                UserId = userId,
+                UserAnswer = answer
+              
+
+            });
+            _answers.InsertOne( quizItemUserAnswerMongo );
+            var quizItem = new QuizItemUserAnswer(
+               new QuizItem(
+                      quizItemUserAnswerMongo.QuizItem.ItemId,
+                        quizItemUserAnswerMongo.QuizItem.Question,
+                           quizItemUserAnswerMongo.QuizItem.IncorrectAnswers,
+                          quizItemUserAnswerMongo.QuizItem.CorrectAnswer),
+                quizItemUserAnswerMongo.UserId,
+                quizItemUserAnswerMongo.QuizId,
+                quizItemUserAnswerMongo.UserAnswer
+            );
+            return quizItem;
+            
+            
         }
 
         public List<QuizItemUserAnswer> GetUserAnswersForQuiz(int quizId, int userId)
         {
-            throw new NotImplementedException();
+
+
+            var quizAnswerMongoEntities = _answers.Find(Builders<QuizItemAnswerMongoEntity>.Filter.Empty).ToList();
+            return (List<QuizItemUserAnswer>)_answers
+                .Find(Builders<QuizItemAnswerMongoEntity>.Filter.Empty);
+              
+                    
+                    
+
+
+                
         }
 
         public Quiz CreateAndGetQuizRandom(int count)

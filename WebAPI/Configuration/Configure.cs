@@ -110,18 +110,18 @@ namespace WseiBackendLab.Configuration
 
         public static async void AddUsers(this WebApplication app)
         {
-            using (var scope = app.Services.CreateScope())
-            {
-                var userManager = scope.ServiceProvider.GetService<UserManager<UserEntity>>();
-                var find = await userManager.FindByNameAsync("pawel");
-                if (find == null)
-                {
-                    UserEntity user = new UserEntity() { Email = "pawel@wsei.edu.pl", UserName = "pawel"};
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var userManager = scope.ServiceProvider.GetService<UserManager<UserEntity>>();
+            //    var find = await userManager.FindByNameAsync("pawel");
+            //    if (find == null)
+            //    {
+            //        UserEntity user = new UserEntity() { Email = "pawel@wsei.edu.pl", UserName = "pawel" };
 
-                    var saved = await userManager?.CreateAsync(user, "1234ABcd$");
-                    userManager.AddToRoleAsync(user, "USER");
-                }
-            }
+            //        var saved = await userManager?.CreateAsync(user, "1234ABcd$");
+            //        userManager.AddToRoleAsync(user, "USER");
+            //    }
+            //}
         }
     }
 }
