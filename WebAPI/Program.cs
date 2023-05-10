@@ -89,4 +89,8 @@ namespace WebAPI
             app.Run();
         }
     }
+    
+}
+public partial class Program
+{
 }

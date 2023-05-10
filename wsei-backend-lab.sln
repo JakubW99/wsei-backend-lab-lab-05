@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfGenerationService", "Pdf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleGRPCClient", "ConsoleGRPCClient\ConsoleGRPCClient.csproj", "{C646D9BF-12FC-4555-823E-DD0092BB814B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAPI", "WebAPI\WebAPI.csproj", "{DFB52EED-5E47-4534-B1EC-82118CE1F778}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{DFB52EED-5E47-4534-B1EC-82118CE1F778}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{96290FD5-BE54-4327-9EA4-717FECC25300}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{DFB52EED-5E47-4534-B1EC-82118CE1F778}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFB52EED-5E47-4534-B1EC-82118CE1F778}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFB52EED-5E47-4534-B1EC-82118CE1F778}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96290FD5-BE54-4327-9EA4-717FECC25300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96290FD5-BE54-4327-9EA4-717FECC25300}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96290FD5-BE54-4327-9EA4-717FECC25300}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96290FD5-BE54-4327-9EA4-717FECC25300}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
